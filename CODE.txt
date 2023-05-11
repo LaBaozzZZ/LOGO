@@ -1,0 +1,57 @@
+##用WebLogo画多简单
+
+
+
+##输入形式可以以序列或矩阵, p2.txt是矩阵
+##p2.txt横坐标是碱基的位置，纵轴是AUCG
+##转置矩阵代码是t(p1), 可以得到和p2一样的矩阵, 把后续代码中的p2换为t(p1)就行
+##########################################################################################################################
+
+library(ggplot2)
+library(ggseqlogo)
+#没有的话用BiocManager::install("Package name")下载
+p2 <- read.table("p2.txt")
+p2 <- as.matrix(p2)
+##把p2变成矩阵
+csl <- make_col_scheme(chars = c("A","U", "C", "G"), groups = c("gr1","gr1", "gr2","gr2"), cols = c("blue","blue","orange","orange"))
+##设置颜色,GROUPS是分组，不分组去掉就可以
+##简单画一下
+ggseqlogo(p2, method = "prob", col_scheme=csl) + theme(axis.line = element_line(colour = "black"), axis.ticks = element_line(colour = "black")) + scale_x_continuous(expand = c(0,0)) + scale_y_continuous(expand = c(0,0))
+##默认以Bits出图，以这里以probability出图
+
+
+####################################################################################################################################
+
+##潘师兄的图，加的东西比较多
+
+#颜色
+csl <- make_col_scheme(chars = c("A","U", "C", "G"),  cols = c("#FF8C00","#FF8C00","#7AC5CD","#7AC5CD"))
+#AUCG的字体列表
+fonts<-list_fonts(F)
+fonts
+
+#1-18（3'末端18个碱基）
+ggseqlogo(dat1, method = "prob", col_scheme=csl,font=fonts[1] ) + theme(axis.text.x = element_blank(),axis.line = element_line(colour = "black",size = 1),axis.ticks.length.y = unit(0.8,"cm"), axis.ticks = element_line(colour = "black",size = 1),axis.text.y = element_text(size = 20),plot.margin = unit(c(0.8,0,0,4),"lines"),axis.title.y = element_text(size = 28,vjust = 5)) + scale_x_continuous(breaks = seq(1,18,1),expand = c(0.005, 0)) + scale_y_continuous(breaks = seq(0,1,0.5),expand = c(0.0041, 0))
+
+################################################################################
+#注释
+#method="prob"是以probability出图
+#col_scheme=csl以csl配色
+#font=fonts[1]设置ATCG的字体，可以输入fonts查看，有12种字体
+#+theme()是设置
+#axis.text.x = element_blank()不显示x轴的标签
+#axis.line = element_line(colour = "black",size = 1)设置坐标轴颜色为黑色，粗细为1
+#axis.ticks.length.y = unit(0.8,"cm")设置y轴刻度线的长度为0.8厘米
+#axis.ticks = element_line(colour = "black",size = 1)加上刻度线
+#axis.text.y = element_text(size = 20)设置y轴文本大小
+#plot.margin = unit(c(0.8,0,0,4),"lines")设置画布，分别代表上，左，下，右，lines是单位，也可输入cm
+#axis.title.y = element_text(size = 28,vjust = 5)设置y轴标题，vjust=5向左移动
+#+ scale_x_continuous()x轴continuous连续变量，discarte设置离散（好像不是这样拼的）
+#breaks = seq(1,18,1)设置刻度为1到18，每格一个
+#expand = c(0.005, 0)让图片左下角对齐坐标轴
+#y轴同理
+#
+################################################################################
+
+#19-36（5'末端24个碱基）
+ggseqlogo(dat36, method = "prob", col_scheme=csl,font=fonts[1] ) + theme(axis.text.x = element_blank(),axis.line = element_line(colour = "black",size = 1),axis.ticks.length.y = unit(0.8,"cm"), axis.ticks = element_line(colour = "black",size = 1),axis.text.y = element_text(size = 20),plot.margin = unit(c(0.8,0,0,4),"lines"),axis.title.y = element_text(size = 28,vjust = 5)) + scale_x_continuous(breaks = seq(1,24,1),expand = c(0.005, 0)) + scale_y_continuous(breaks = seq(0,1,0.5),expand = c(0.0041, 0))
